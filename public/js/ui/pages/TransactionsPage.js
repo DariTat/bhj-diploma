@@ -10,7 +10,12 @@ class TransactionsPage {
    * Сохраняет переданный элемент и регистрирует события
    * через registerEvents()
    * */
-  constructor( element ) {
+  constructor(element) {
+    if(element == ''){
+      throw new Error ('element undefined');
+    }
+    this.element = element;
+    this.registerEvents();
 
   }
 
@@ -18,7 +23,7 @@ class TransactionsPage {
    * Вызывает метод render для отрисовки страницы
    * */
   update() {
-
+    this.render(this.lastOptions);
   }
 
   /**
@@ -28,6 +33,10 @@ class TransactionsPage {
    * TransactionsPage.removeAccount соответственно
    * */
   registerEvents() {
+    let remove = document.querySelector('.remove-account');
+    let removeT = [...document.querySelectorAll('.transaction__remove')];
+    remove.addEventListener('click', this.removeAccount);
+    removeT.forEach((item)=> item.addEventListener('click', this.removeTransaction(item.dataset.id)));
 
   }
 
@@ -41,7 +50,22 @@ class TransactionsPage {
    * для обновления приложения
    * */
   removeAccount() {
-
+    if(this.lastOptions == undefined){
+      return false;
+    }
+    let answer =  Window.confirm('Вы действительно хотите удалить счёт?');
+    if(answer){
+      Account.remove(this.lastOptions, (err,response)=>{
+        if(response.success && response){
+          App.updateWidgets();
+          App.updateForms();
+        }else{
+          err = new Error('Не удалось удалить счет');
+        }
+      })
+      this.clear();
+    }
+    
   }
 
   /**
@@ -50,8 +74,17 @@ class TransactionsPage {
    * По удалению транзакции вызовите метод App.update(),
    * либо обновляйте текущую страницу (метод update) и виджет со счетами
    * */
-  removeTransaction( id ) {
-
+  removeTransaction(id) {
+    let answer =  Window.confirm('Вы действительно хотите удалить эту транзакцию?');
+    if(answer){
+      Transaction.remove(id, (err, response)=>{
+        if(response && response.success){
+          App.update();
+        }else{
+          err = new Error('Не удалось удалить транзакцию');
+        }
+      })
+    }
   }
 
   /**
@@ -61,7 +94,14 @@ class TransactionsPage {
    * в TransactionsPage.renderTransactions()
    * */
   render(options){
-
+    if(options == undefined){
+      return false;
+    } else{
+      this.renderTitle(Account.get(options));
+      this.lastOptions = options;
+      this.renderTransactions(Transaction.list());
+    }
+   
   }
 
   /**
@@ -70,7 +110,7 @@ class TransactionsPage {
    * Устанавливает заголовок: «Название счёта»
    * */
   clear() {
-
+    this.renderTransactions()
   }
 
   /**

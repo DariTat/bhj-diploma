@@ -4,12 +4,13 @@
  * Имеет свойство URL, равное '/user'.
  * */
 class User {
+  static URL = '/user';
   /**
    * Устанавливает текущего пользователя в
    * локальном хранилище.
    * */
   static setCurrent(user) {
-
+    localStorage.setItem("user", JSON.stringify(user));
   }
 
   /**
@@ -17,7 +18,8 @@ class User {
    * пользователе из локального хранилища.
    * */
   static unsetCurrent() {
-
+    localStorage.removeItem('user');
+    
   }
 
   /**
@@ -25,7 +27,7 @@ class User {
    * из локального хранилища
    * */
   static current() {
-
+    return JSON.parse(localStorage.getItem('user'));
   }
 
   /**
@@ -34,6 +36,22 @@ class User {
    * */
   static fetch(callback) {
 
+    createRequest({
+      url: this.URL +'/current',
+      method: 'GET',
+      callback(err, response) {
+        if(response && response.user) {
+          this.setCurrent(response.user);
+        }
+        if(response.success === false){
+         this.unsetCurrent();
+        }
+        if(err) {
+          err = new Error('Ошибка получения информации о пользователе');
+        }
+        callback(err, response);
+      }
+    })
   }
 
   /**
@@ -51,6 +69,8 @@ class User {
       callback: (err, response) => {
         if (response && response.user) {
           this.setCurrent(response.user);
+        }else {
+          err = new Error('Ошибка авторизации')
         }
         callback(err, response);
       }
@@ -64,7 +84,20 @@ class User {
    * User.setCurrent.
    * */
   static register(data, callback) {
-
+    createRequest({
+      data,
+      method: 'POST',
+      url: this.URL + '/register',
+      callback: (err, response) => {
+        if(response && response.user){
+          console.log(response.user);
+          this.setCurrent(response.user);
+        }else {
+          err = new Error('Ошибка регистрации')
+        }
+        callback(err, response)
+      }
+    })
   }
 
   /**
@@ -72,6 +105,15 @@ class User {
    * выхода необходимо вызвать метод User.unsetCurrent
    * */
   static logout(callback) {
-
+    createRequest({
+      method: 'POST',
+      url: this.URL + '/logout',
+      callback: (err, response) =>{
+        if(response && response.user) {
+          this.unsetCurrent();
+        }
+        callback(err, response);
+      }
+    })
   }
 }

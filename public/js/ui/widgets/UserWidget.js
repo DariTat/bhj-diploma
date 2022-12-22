@@ -12,10 +12,13 @@ class UserWidget {
    * необходимо выкинуть ошибку.
    * */
   constructor(element){
-
+    if(element == ''){
+      throw new Error ('element undefined');
+    }
+    this.element = element;
   }
 
-  /**
+  /** 
    * Получает информацию о текущем пользователе
    * с помощью User.current()
    * Если пользователь авторизован,
@@ -23,6 +26,8 @@ class UserWidget {
    * авторизованного пользователя
    * */
   update(){
-
+    let user =  User.current();
+    let name = document.querySelector('.user-name');
+    name.insertAdjacentElement('afterbegin', user.name);
   }
 }
