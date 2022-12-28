@@ -10,12 +10,37 @@ class Entity {
    * */
   static URL = '';
   static list(data, callback){  
-    createRequest({
-      url: this.URL,
-      data, 
-      method:'GET',
-      callback
-    })
+    if(this.URL == '/transaction'){
+      createRequest({
+        url: this.URL + '?account_id=' + data,
+        data, 
+        method:'GET',
+        callback: (err, response) =>{
+            if(response.success && response){
+              console.log('Получен список данных')
+            }else{
+              err = new Error ('Не удалось получить данные')
+            }
+          callback(err, response);
+        }
+      })} else {
+        createRequest({
+          url: this.URL,
+          data, 
+          method:'GET',
+          callback: (err, response) =>{
+              if(response.success && response){
+                console.log('Получен список данных')
+              }else{
+                err = new Error ('Не удалось получить данные')
+              }
+            callback(err, response);
+          }
+        })
+      }
+      
+    
+    
   }
 
   /**
@@ -28,7 +53,14 @@ class Entity {
       url: this.URL,
       data, 
       method:'PUT',
-      callback
+      callback: (err, response)=>{
+        if(response.user && response){
+          console.log ('Создаем счёт/расход/доход')
+        }else{
+          err = new Error ('Не удалось создать счёт/расход/доход')
+        }
+        callback(err,response);
+      }
     })
   }
 
@@ -41,7 +73,14 @@ class Entity {
       url: this.URL,
       data, 
       method:'DELETE',
-      callback
+      callback: (err, response)=>{
+        if(response.success && response){
+          console.log ('Успешно удален')
+        }else{
+          err = new Error ('Не удалось удалить счёт/расход/доход')
+        }
+        callback(err,response);
+      }
     })
   }
 }

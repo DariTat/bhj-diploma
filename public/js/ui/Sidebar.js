@@ -45,13 +45,13 @@ class Sidebar {
   })
   let logout = document.querySelector('.menu-item_logout');
   logout.addEventListener('click', () => {
-    User.logout();
-    if(response.success == true){
-      App.setState('init');
-    }
+    User.logout((err, response)=>{
+      if(response.success == true){
+        App.setState('init');
+      } else {
+        err = new Error ('Не удалось выйти')
+      }
+    })
   })
   }
-
-  
-
 }

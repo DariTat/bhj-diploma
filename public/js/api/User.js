@@ -90,12 +90,11 @@ class User {
       url: this.URL + '/register',
       callback: (err, response) => {
         if(response && response.user){
-          console.log(response.user);
           this.setCurrent(response.user);
         }else {
           err = new Error('Ошибка регистрации')
         }
-        callback(err, response)
+        callback(err, response);
       }
     })
   }
@@ -109,7 +108,7 @@ class User {
       method: 'POST',
       url: this.URL + '/logout',
       callback: (err, response) =>{
-        if(response && response.user) {
+        if(response && response.success) {
           this.unsetCurrent();
         }
         callback(err, response);

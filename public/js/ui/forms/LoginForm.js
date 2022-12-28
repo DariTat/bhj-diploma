@@ -14,13 +14,12 @@ class LoginForm extends AsyncForm {
   onSubmit(data) {
     User.login(data, (err,response) => {
       if(response.user && response){
-        App.setState('user-logged')
+        App.setState('user-logged');
         document.querySelector("#login-form").reset(); 
         App.getModal('login').close();
       } else {
         err = new Error ('Ошибка авторизации');
       }
-      
     });
   }
 }

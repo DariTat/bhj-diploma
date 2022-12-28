@@ -5,6 +5,12 @@
       "email": "demo@demo",
       "password": "demo",
       "id": "1"
+    },
+    {
+      "name": "Мария",
+      "email": "maria@demo",
+      "password": "maria",
+      "id": "6db1r1v4glc7968p5"
     }
   ],
   "accounts": [
@@ -22,6 +28,26 @@
       "name": "Бизнес",
       "user_id": "1",
       "id": "3"
+    },
+    {
+      "name": "наличные",
+      "user_id": "1",
+      "id": "6db1r1nh4lc4gek3b"
+    },
+    {
+      "name": "онлайн покупки",
+      "user_id": "6db1r1v4glc7968p5",
+      "id": "6db1r1s3klc796t4k"
+    },
+    {
+      "name": "Наличные",
+      "user_id": "6db1r1v4glc7968p5",
+      "id": "6db1r1w94lc7a1z0c"
+    },
+    {
+      "name": "Квитанции",
+      "user_id": "6db1r1v4glc7968p5",
+      "id": "6db1r1yk0lc7b655s"
     }
   ],
   "transactions": [
@@ -159,6 +185,157 @@
       "sum": 300000,
       "type": "expense",
       "user_id": "1"
+    },
+    {
+      "id": "6db1r1lrglc3dixtw",
+      "type": "income",
+      "name": "зарплата",
+      "sum": 10000,
+      "user_id": "1",
+      "created_at": "2022-12-25T12:55:51.235Z"
+    },
+    {
+      "id": "6db1r1lrglc3dixu7",
+      "type": "income",
+      "name": "зарплата",
+      "sum": 10000,
+      "user_id": "1",
+      "created_at": "2022-12-25T12:55:51.247Z"
+    },
+    {
+      "id": "6db1r1otslc4hanba",
+      "type": "income",
+      "name": "долг",
+      "sum": 10000,
+      "account_id": "6db1r1nh4lc4gek3b",
+      "user_id": "1",
+      "created_at": "2022-12-26T07:29:08.997Z"
+    },
+    {
+      "id": "6db1r1olslc4hb9cb",
+      "type": "expense",
+      "name": "мандарины",
+      "sum": 190,
+      "account_id": "2",
+      "user_id": "1",
+      "created_at": "2022-12-26T07:29:37.546Z"
+    },
+    {
+      "id": "6db1r1syclc5xvpsm",
+      "type": "expense",
+      "name": "Шампанское",
+      "sum": 1000,
+      "account_id": "2",
+      "user_id": "1",
+      "created_at": "2022-12-27T08:01:12.021Z"
+    },
+    {
+      "id": "6db1rrwolc6054ic",
+      "type": "expense",
+      "name": "корм",
+      "sum": -1000,
+      "account_id": "6db1r1nh4lc4gek3b",
+      "user_id": "1",
+      "created_at": "2022-12-27T09:04:30.227Z"
+    },
+    {
+      "id": "6db1r1tv4lc606w8w",
+      "type": "income",
+      "name": "проект",
+      "sum": 15000,
+      "account_id": "3",
+      "user_id": "1",
+      "created_at": "2022-12-27T09:05:52.832Z"
+    },
+    {
+      "id": "6db1r1x2slc79tcad",
+      "type": "expense",
+      "name": "Тушь",
+      "sum": 1000,
+      "account_id": "6db1r1s3klc796t4k",
+      "user_id": "6db1r1v4glc7968p5",
+      "created_at": "2022-12-28T06:23:02.772Z"
+    },
+    {
+      "id": "6db1r1s08lc7a2qct",
+      "type": "income",
+      "name": "Продажа кресла",
+      "sum": 5000,
+      "account_id": "6db1r1w94lc7a1z0c",
+      "user_id": "6db1r1v4glc7968p5",
+      "created_at": "2022-12-28T06:30:20.908Z"
+    },
+    {
+      "id": "6db1r1y3klc7a6spc",
+      "type": "expense",
+      "name": "Курица",
+      "sum": 350,
+      "account_id": "2",
+      "user_id": "1",
+      "created_at": "2022-12-28T06:33:30.575Z"
+    },
+    {
+      "id": "6db1r1yjwlc7akswc",
+      "type": "income",
+      "name": "Урок",
+      "sum": 1200,
+      "account_id": "6db1r1nh4lc4gek3b",
+      "user_id": "1",
+      "created_at": "2022-12-28T06:44:24.011Z"
+    },
+    {
+      "id": "6db1rgqwlc7avrer",
+      "type": "income",
+      "name": "Отпуск",
+      "sum": 10000,
+      "account_id": "1",
+      "user_id": "1",
+      "created_at": "2022-12-28T06:52:55.299Z"
+    },
+    {
+      "id": "6db1r1raclc7b3pyf",
+      "type": "income",
+      "name": "Отпуск",
+      "sum": 10000,
+      "account_id": "1",
+      "user_id": "1",
+      "created_at": "2022-12-28T06:59:06.662Z"
+    },
+    {
+      "id": "6db1r1vb0lc7b4ru9",
+      "type": "income",
+      "name": "Долг",
+      "sum": 25000,
+      "account_id": "6db1r1w94lc7a1z0c",
+      "user_id": "6db1r1v4glc7968p5",
+      "created_at": "2022-12-28T06:59:55.760Z"
+    },
+    {
+      "id": "6db1r1z1clc7b5bqw",
+      "type": "expense",
+      "name": "Одежда",
+      "sum": 10000,
+      "account_id": "6db1r1s3klc796t4k",
+      "user_id": "6db1r1v4glc7968p5",
+      "created_at": "2022-12-28T07:00:21.559Z"
+    },
+    {
+      "id": "6db1r1tcolc7b6c52",
+      "type": "expense",
+      "name": "Интернет",
+      "sum": 1500,
+      "account_id": "6db1r1yk0lc7b655s",
+      "user_id": "6db1r1v4glc7968p5",
+      "created_at": "2022-12-28T07:01:08.725Z"
+    },
+    {
+      "id": "6db1rtb0lc7b6okh",
+      "type": "expense",
+      "name": "Отопление",
+      "sum": 4000,
+      "account_id": "6db1r1yk0lc7b655s",
+      "user_id": "6db1r1v4glc7968p5",
+      "created_at": "2022-12-28T07:01:24.832Z"
     }
   ]
 }

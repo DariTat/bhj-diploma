@@ -18,18 +18,31 @@ class CreateTransactionForm extends AsyncForm {
    * Обновляет в форме всплывающего окна выпадающий список
    * */
   renderAccountsList() {
-    let select;
-    let response = Account.list();
-    if(this.element.id == 'new-income-form'){
-      select = document.getElementById('income-accounts-list');
-    } else if(this.element.id == 'new-expense-form'){
-      select = document.getElementById('expense-accounts-list');
-    }
-    for(let item in response){
-    select.insertAdjacentHTML('beforeEnd',`
-      <option value="${response[item]['id']}">${response[item]['name']}</option>`
-    )
-    }
+    document.querySelector("#income-accounts-list").innerHTML = '';
+    document.querySelector("#expense-accounts-list").innerHTML = '';
+    let user = User.current();
+    Account.list(user, (err,response)=>{
+      if(response.success && response){
+        if(this.element.id == 'new-income-form'){
+         
+          for(let item in response.data){
+            document.getElementById('income-accounts-list').insertAdjacentHTML('beforeEnd',`
+              <option value="${response.data[item]['id']}">${response.data[item]['name']}</option>`
+            )
+          }
+        } else if(this.element.id == 'new-expense-form'){
+          
+          for(let item in response.data){
+            document.getElementById('expense-accounts-list').insertAdjacentHTML('beforeEnd',`
+              <option value="${response.data[item]['id']}">${response.data[item]['name']}</option>`
+            )
+          }
+        }
+      }else{
+        err = new Error ('Не удалось получить список')
+      }
+    });
+    
   }
 
   /**
@@ -39,15 +52,17 @@ class CreateTransactionForm extends AsyncForm {
    * в котором находится форма
    * */
   onSubmit(data) {
-    Transaction.create(data)
-    if(response && response.user){
-      App.update();
-      this.element.reset();
-      if(this.element.id == 'new-income-form'){
-        App.getModal('newIncome').close();
-      } else if(this.element.id == 'new-expense-form'){
-        App.getModal('newExpense').close();
+    Transaction.create(data, (err, response)=>{
+      if(response && response.success){
+        App.update();
+        this.element.reset();
+        if(this.element.id == 'new-income-form'){
+          App.getModal('newIncome').close();
+        } else if(this.element.id == 'new-expense-form'){
+          App.getModal('newExpense').close();
+        }
       }
+    })
     }
-  }
+    
 }

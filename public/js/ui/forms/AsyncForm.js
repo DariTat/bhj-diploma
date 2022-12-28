@@ -25,12 +25,12 @@ class AsyncForm {
    * вызывает метод submit()
    * */
   registerEvents() {
-    this.element.addEventListener('submit', function(event){
+    let modal = this.element.closest('.modal')
+    let btn = modal.querySelector('.btn-primary')
+    btn.addEventListener('click', (event) =>{
       event.preventDefault();
       this.submit();
-      
     })
-    
   }
 
   /**
@@ -42,7 +42,6 @@ class AsyncForm {
    * */
   getData() {
     let form = new FormData(this.element);
-    console.log(form)
     return form;
   }
 

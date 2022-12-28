@@ -1,3 +1,4 @@
+
 /**
  * Класс TransactionsPage управляет
  * страницей отображения доходов и
@@ -16,7 +17,7 @@ class TransactionsPage {
     }
     this.element = element;
     this.registerEvents();
-
+    this.lastOptions = {};
   }
 
   /**
@@ -33,11 +34,19 @@ class TransactionsPage {
    * TransactionsPage.removeAccount соответственно
    * */
   registerEvents() {
-    let remove = document.querySelector('.remove-account');
-    let removeT = [...document.querySelectorAll('.transaction__remove')];
-    remove.addEventListener('click', this.removeAccount);
-    removeT.forEach((item)=> item.addEventListener('click', this.removeTransaction(item.dataset.id)));
-
+    this.element.addEventListener('click', (event) => {
+      let e = event.target;
+      if(e.className.includes('remove-account')){
+        this.removeAccount();
+      }
+      if(e.className.includes('transaction__remove')){
+        this.removeTransaction(e.dataset.id);
+      }
+       if(e.parentElement.className.includes('transaction__remove')){
+        this.removeTransaction(e.parentElement.dataset.id);
+      }
+    })
+    
   }
 
   /**
@@ -53,9 +62,11 @@ class TransactionsPage {
     if(this.lastOptions == undefined){
       return false;
     }
-    let answer =  Window.confirm('Вы действительно хотите удалить счёт?');
+    let answer = confirm('Вы действительно хотите удалить счёт?');
     if(answer){
-      Account.remove(this.lastOptions, (err,response)=>{
+      let form = new FormData();
+      form.append('id', this.lastOptions.account_id);
+      Account.remove(form, (err, response)=>{
         if(response.success && response){
           App.updateWidgets();
           App.updateForms();
@@ -75,9 +86,11 @@ class TransactionsPage {
    * либо обновляйте текущую страницу (метод update) и виджет со счетами
    * */
   removeTransaction(id) {
-    let answer =  Window.confirm('Вы действительно хотите удалить эту транзакцию?');
+    let answer = confirm('Вы действительно хотите удалить эту транзакцию?');
     if(answer){
-      Transaction.remove(id, (err, response)=>{
+      let form = new FormData();
+      form.append('id', id)
+      Transaction.remove(form, (err, response)=>{
         if(response && response.success){
           App.update();
         }else{
@@ -94,12 +107,23 @@ class TransactionsPage {
    * в TransactionsPage.renderTransactions()
    * */
   render(options){
+    this.element.querySelector('.content').innerHTML = '';
     if(options == undefined){
       return false;
-    } else{
-      this.renderTitle(Account.get(options));
+    } else {
+      Account.get(options.account_id, (err,response)=> {
+        if (response.success && response){
+          this.renderTitle(response.data.name)
+        }else {
+          err = new Error ('Не удалось открыть счёт')
+        }
+      })
       this.lastOptions = options;
-      this.renderTransactions(Transaction.list());
+      Transaction.list(options.account_id, (err,response)=>{
+        if(response.success && response){
+          this.renderTransactions(response.data)
+        }
+      })
     }
    
   }
@@ -110,14 +134,17 @@ class TransactionsPage {
    * Устанавливает заголовок: «Название счёта»
    * */
   clear() {
-    this.renderTransactions()
+    this.renderTransactions([]);
+    this.renderTitle('Название счёта');
+    this.lastOptions = {};
   }
 
   /**
    * Устанавливает заголовок в элемент .content-title
    * */
   renderTitle(name){
-
+    let title = document.querySelector('.content-title');
+    title.textContent = name;
   }
 
   /**
@@ -125,7 +152,16 @@ class TransactionsPage {
    * в формат «10 марта 2019 г. в 03:20»
    * */
   formatDate(date){
-
+    let d = new Date(date).toLocaleString('ru', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+    let t = new Date(date).toLocaleTimeString('ru', {
+      hour: "2-digit",
+      minute: "2-digit"
+    });
+    return d + ' в ' + t;
   }
 
   /**
@@ -133,7 +169,29 @@ class TransactionsPage {
    * item - объект с информацией о транзакции
    * */
   getTransactionHTML(item){
-
+    let date = this.formatDate(item.created_at);
+    
+    return `<div class="transaction transaction_${item.type} row">
+      <div class="col-md-7 transaction__details">
+        <div class="transaction__icon">
+          <span class="fa fa-money fa-2x"></span>
+        </div>
+      <div class="transaction__info">
+          <h4 class="transaction__title">${item.name}</h4>
+          <div class="transaction__date">${date}</div>
+      </div>
+      </div>
+      <div class="col-md-3">
+        <div class="transaction__summ">
+          ${item.sum}<span class="currency">₽</span>
+        </div>
+      </div>
+      <div class="col-md-2 transaction__controls">
+        <button class="btn btn-danger transaction__remove" data-id=${item.id}>
+            <i class="fa fa-trash"></i>  
+        </button>
+      </div>
+    </div>`
   }
 
   /**
@@ -141,6 +199,12 @@ class TransactionsPage {
    * используя getTransactionHTML
    * */
   renderTransactions(data){
-
+   let content =  this.element.querySelector('.content');
+   if(data.length === 0){
+    content.innerHTML = '';
+   }
+   for (let item in data){
+    content.innerHTML += this.getTransactionHTML(data[item]);
+   }
   }
 }

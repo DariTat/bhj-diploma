@@ -28,6 +28,6 @@ class UserWidget {
   update(){
     let user =  User.current();
     let name = document.querySelector('.user-name');
-    name.insertAdjacentElement('afterbegin', user.name);
+    name.textContent = user.name;
   }
 }
