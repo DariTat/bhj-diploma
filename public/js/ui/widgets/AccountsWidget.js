@@ -80,7 +80,6 @@ class AccountsWidget {
    * */
   clear() {
     [...this.element.querySelectorAll('.account')].forEach((item) => item.remove());
-    console.log('account удалены');
   }
 
   /**

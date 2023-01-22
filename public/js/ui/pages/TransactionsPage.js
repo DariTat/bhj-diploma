@@ -108,24 +108,23 @@ class TransactionsPage {
    * */
   render(options){
     this.element.querySelector('.content').innerHTML = '';
-    if(options == undefined){
+    if (Object.keys(options).length == 0) {
       return false;
     } else {
-      Account.get(options.account_id, (err,response)=> {
-        if (response.success && response){
-          this.renderTitle(response.data.name)
+      Account.get(options.account_id, (err,response) => {
+        if (response.success && response) {
+          this.renderTitle(response.data.name);
         }else {
-          err = new Error ('Не удалось открыть счёт')
+          err = new Error ('Не удалось открыть счёт');
         }
       })
       this.lastOptions = options;
-      Transaction.list(options.account_id, (err,response)=>{
+      Transaction.list(options.account_id, (err,response) => {
         if(response.success && response){
           this.renderTransactions(response.data)
         }
       })
     }
-   
   }
 
   /**

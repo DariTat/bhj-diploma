@@ -6,10 +6,7 @@ const createRequest = (options) => {
 
     const xhr = new XMLHttpRequest;
     xhr.responseType = 'json';
-    let data = options.data;
-    let url = options.url;
-    let method = options.method;
-    let callback = options.callback;
+    const { data, url, method, callback } = options;
     try{
         xhr.open(method, url);
         xhr.send(data);
@@ -17,7 +14,6 @@ const createRequest = (options) => {
         console.log(e);
     }
     xhr.onload = function(){
-       console.log(xhr.response)
        callback(null, xhr.response);
     }      
 }
